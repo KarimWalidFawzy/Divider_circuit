@@ -1,20 +1,20 @@
 parameter ARG_BIT_WIDTH = 32;
 parameter PRECISION=64;
 module reciprocal(
-    input [31:0] B,
-    output [63:0] rec,
+    input [ARG_BIT_WIDTH-1:0] B,
+    output [PRECISION-1:0] rec,
     output dvz);
     assign dvz = (B==0);
     reg [PRECISION-1:0] fp;
     wire [PRECISION-1:0][ARG_BIT_WIDTH:0] wiress;
-    subandshft a_0(1,B,wiress[0],fp[PRECISION-1]);
+    subandshft a_0(33'b01,B,wiress[0],fp[PRECISION-1]);
     subandshft a_1(wiress[0],B,wiress[1],fp[PRECISION-2]);
     subandshft a_2(wiress[1],B,wiress[2],fp[PRECISION-3]);
     subandshft a_3(wiress[2],B,wiress[3],fp[60]);
     subandshft a_4(wiress[3],B,wiress[4],fp[59]);
     subandshft a_5(wiress[4],B,wiress[5],fp[58]);
     subandshft a_6(wiress[5],B,wiress[6],fp[57]);
-    subandshft a_7(wiress[6],B,wiress[7],fp[56]); /*Continue like this for 64 modules*/
+    subandshft a_7(wiress[6],B,wiress[7],fp[56]); /*Continue like this for PRECISION modules*/
     subandshft a_8(wiress[7],B,wiress[8],fp[55]);
     subandshft a_9(wiress[8],B,wiress[9],fp[54]);
     subandshft a_10(wiress[9],B,wiress[10],fp[53]);
@@ -74,7 +74,7 @@ module reciprocal(
     /*
     Generally:
     subandshift a_i(wiress[i-1],B,wiress[i],fp[PRECISION-1-i]);
-    where i is the index
+    where i is the index from i = 0 -> PRECISION-1
     */
     assign rec = fp;
 endmodule
