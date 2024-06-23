@@ -9,6 +9,6 @@ module subandshft(
     always @(*) begin
         diff<=a-b;
     end
-    assign nn=~(diff<0);
+    assign nn=~(a<b);
     assign c=nn?(diff<<1):(a<<1);
 endmodule
